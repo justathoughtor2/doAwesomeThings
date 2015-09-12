@@ -12,11 +12,17 @@ angular.module('doAwesomeThings', ['ionic', 'ngStorage'])
   
   // Add an awesome thing
   $scope.addAwesomeThing = function() {
-    console.log('Awesome thing added!');
+    console.log('Attempting to add awesome thing...');
     
-    var newAwesomeThing = $scope.newAwesomeThing.trim();
+    if(typeof $scope.awesomeThingForm.newAwesomeThing == "undefined") {
+      console.log('Awesome thing was nonexistent! Aborting!');
+      return;
+    }
+    
+    var newAwesomeThing = $scope.awesomeThingForm.newAwesomeThing.trim();
     
     if(!newAwesomeThing.length) {
+      console.log('Awesome thing was empty! Aborting!');
       return;
     }
     
@@ -24,19 +30,32 @@ angular.module('doAwesomeThings', ['ionic', 'ngStorage'])
       text: newAwesomeThing,
       complete: false
     });
+    
+    console.log('Awesome thing added!');
   };
   
   // Edit an awesome thing
   $scope.editAwesomeThing = function(thing) {
+    console.log('Attempting to edit awesome thing...');
+    
+    if(!thing.length) {
+      console.log('Awesome thing was empty! Removing!');
+      $scope.removeAwesomeThing(thing);
+      return;
+    }
+    
     $scope.$storage.awesomeThings[$scope.$storage.awesomeThings.indexOf(thing)] = {
       text: thing,
       complete: false
     };
+    
+    console.log('Awesome thing edited!');
   };
   
   // Remove a single awesome thing
   $scope.removeAwesomeThing = function(thing) {
     $scope.$storage.awesomeThings.splice($scope.$storage.awesomeThings.indexOf(thing), 1);
+    console.log('Awesome thing removed!');
   };
 })
 
