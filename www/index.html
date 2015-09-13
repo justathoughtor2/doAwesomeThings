@@ -26,7 +26,7 @@
   </head>
   <body ng-app="doAwesomeThings">
     <ion-pane ng-controller="HomeCtrl">
-      <ion-header-bar class="bar-royal">
+      <ion-header-bar class="bar bar-header bar-royal">
         <h1 class="title">Do Awesome Things</h1>
       </ion-header-bar>
       <ion-content>
@@ -50,18 +50,12 @@
           </div>
         </div>
       </ion-content>
-      <ion-footer-bar class="item-input-inset">
+      <ion-footer-bar align-title="left" class="item-input-inset">
         <form name="awesomeThingForm" ng-submit="addAwesomeThing()">
-          <div class="row" id="awesomeThingFormRow">
-            <div class="col col-90" id="awesomeThingInputCol">
-              <label class="item item-input-wrapper" id="awesomeThingInputLabel">
-                <input type="text" placeholder="Add awesome thing..." ng-model="awesomeThingForm.newAwesomeThing" />
-              </label>
-            </div>
-            <div class="col col-10" id="awesomeThingSubmitCol">
-              <button class="button button-clear button-royal icon ion-plus-circled" id="awesomeThingSubmitButton"></button>
-            </div>
-          </div>
+          <label class="item-input-wrapper" id="awesomeThingInputLabel">
+            <input type="text" placeholder="Add awesome thing..." ng-model="awesomeThingForm.newAwesomeThing" />
+          </label>
+          <button class="button button-clear button-royal" id="awesomeThingSubmitButton">Create!</button>
         </form>
       </ion-footer-bar>
       <script id="editAwesomeThingModal.html" type="text/ng-template">
@@ -80,7 +74,7 @@
               </div>
               <div class="row">
                 <div class="col">
-                  <button class="button button-royal">Submit</button>
+                  <button class="button button-royal">Finish!</button>
                 </div>
               </div>
             </form>

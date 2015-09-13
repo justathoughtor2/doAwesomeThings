@@ -6,6 +6,8 @@
 
 #awesomeThingInputLabel, #awesomeThingSubmitButton {
   padding: 0px;
+  margin-top: 5px;
+  display: inline-block;
 }
 
 [name="awesomeThingForm"] {
