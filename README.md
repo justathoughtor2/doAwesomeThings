@@ -7,14 +7,12 @@ The installation instructions below assume that you already have Node.js, NPM, B
 ## Installation instructions
 1. Clone this repository
 2. Run the following commands in the root of the repository:
-
-
+```
     npm install
     bower install
     ionic platform add android
     ionic build android
-    ionic emulate android`
-    
-    
+    ionic emulate android
+```
 3. ?????
 4. Profit!!
