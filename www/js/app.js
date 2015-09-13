@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('doAwesomeThings', ['ionic', 'ngStorage'])
 
-.controller('HomeCtrl', function($scope, $localStorage) {
+.controller('HomeCtrl', function($scope, $ionicActionSheet, $timeout, $ionicModal, $localStorage) {
   $scope.$storage = $localStorage.$default({
     awesomeThings: []
   });
@@ -35,21 +35,25 @@ angular.module('doAwesomeThings', ['ionic', 'ngStorage'])
   };
   
   // Edit an awesome thing
-  $scope.editAwesomeThing = function(thing) {
+  $scope.editAwesomeThing = function() {
     console.log('Attempting to edit awesome thing...');
     
-    if(!thing.length) {
-      console.log('Awesome thing was empty! Removing!');
-      $scope.removeAwesomeThing(thing);
-      return;
+    var editedAwesomeThing = $scope.selectedThing.text.trim();
+    
+    if(!editedAwesomeThing.length) {
+      console.log('Edit made thing empty! Deleting!');
+      
+      $scope.removeAwesomeThing($scope.originalSelectedThing);
+      
+      $scope.closeEditModal();
     }
-    
-    $scope.$storage.awesomeThings[$scope.$storage.awesomeThings.indexOf(thing)] = {
-      text: thing,
-      complete: false
-    };
-    
-    console.log('Awesome thing edited!');
+    else {
+      $scope.$storage.awesomeThings[$scope.$storage.awesomeThings.indexOf($scope.originalSelectedThing)].text = editedAwesomeThing;
+      
+      $scope.closeEditModal();
+      
+      console.log('Awesome thing edited!');
+    }
   };
   
   // Remove a single awesome thing
@@ -57,6 +61,83 @@ angular.module('doAwesomeThings', ['ionic', 'ngStorage'])
     $scope.$storage.awesomeThings.splice($scope.$storage.awesomeThings.indexOf(thing), 1);
     console.log('Awesome thing removed!');
   };
+  
+  // Change completion status
+  $scope.changeAwesomeThingComplete = function(thing) {
+    if(!thing.complete) {
+      console.log('Awesome thing completed!');
+      $scope.$storage.awesomeThings[$scope.$storage.awesomeThings.indexOf(thing)].complete = true;
+    }
+    else {
+      console.log('Awesome thing undone!');
+      $scope.$storage.awesomeThings[$scope.$storage.awesomeThings.indexOf(thing)].complete = false;
+    }
+  };
+  
+  // Show the action sheet
+  $scope.showActionSheet = function(thing) {
+    $scope.selectedThing = $scope.$storage.awesomeThings[$scope.$storage.awesomeThings.indexOf(thing)];
+    
+    $scope.originalSelectedThing = $scope.selectedThing;
+    
+    var buttonText = 'Mark Not Done';
+    if(!$scope.$storage.awesomeThings[$scope.$storage.awesomeThings.indexOf(thing)].complete) {
+      buttonText = 'Mark Done';
+    }
+    
+    var hideSheet = $ionicActionSheet.show({
+      buttons: [
+        { text: buttonText },
+        { text: 'Edit' }
+      ],
+      destructiveText: 'Remove',
+      cancelText: 'Cancel',
+      titleText: 'Modify Awesomeness',
+      cancel: function() {
+        return true;
+      },
+      buttonClicked: function(index) {
+        if(index === 0) {
+          $scope.changeAwesomeThingComplete(thing);
+        }
+        else {
+          $scope.openEditModal();
+        }
+        return true;
+      },
+      destructiveButtonClicked: function() {
+        $scope.removeAwesomeThing(thing);
+        return true;
+      }
+    });
+    
+    $timeout(function() {
+      hideSheet();
+    }, 5000);
+  };
+  
+  // Set up the modal
+  $ionicModal.fromTemplateUrl('editAwesomeThingModal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  
+  // Open the modal
+  $scope.openEditModal = function() {
+    $scope.modal.show();
+  };
+  
+  // Close the modal
+  $scope.closeEditModal = function() {
+    $scope.modal.hide();
+  };
+  
+  // Clean up the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
 })
 
 .run(function($ionicPlatform) {

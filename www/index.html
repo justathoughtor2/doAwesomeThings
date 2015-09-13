@@ -25,7 +25,6 @@
     <script src="js/app.js"></script>
   </head>
   <body ng-app="doAwesomeThings">
-
     <ion-pane ng-controller="HomeCtrl">
       <ion-header-bar class="bar-royal">
         <h1 class="title">Do Awesome Things</h1>
@@ -34,9 +33,17 @@
         <div class="row" id="awesomeThingsCardsRow">
           <div class="col col-100" id="awesomeThingsCardsCol">
             <div class="cards">
-              <div class="card" ng-repeat="thing in $storage.awesomeThings">
+              <div class="card" ng-repeat="thing in $storage.awesomeThings | orderBy : '-'" ng-click="showActionSheet(thing)">
                 <div class="item item-text-wrap">
-                  {{thing.text}}
+                  <div class="row">
+                    <div class="col col-20">
+                      <i class="icon ion-checkmark-circled royal done-or-not" ng-show="thing.complete"></i>
+                      <i class="icon ion-record royal done-or-not" ng-hide="thing.complete"></i>
+                    </div>
+                    <div class="col col-80">
+                      {{thing.text}}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -47,16 +54,39 @@
         <form name="awesomeThingForm" ng-submit="addAwesomeThing()">
           <div class="row" id="awesomeThingFormRow">
             <div class="col col-90" id="awesomeThingInputCol">
-              <label class="item item-input-wrapper">
-                <input type="text" placeholder="Add awesome things..." ng-model="awesomeThingForm.newAwesomeThing" />
+              <label class="item item-input-wrapper" id="awesomeThingInputLabel">
+                <input type="text" placeholder="Add awesome thing..." ng-model="awesomeThingForm.newAwesomeThing" />
               </label>
             </div>
-            <div class="col col-10 col-bottom" id="awesomeThingSubmitCol">
-              <button class="button button-clear button-royal icon ion-plus-circled"></button>
+            <div class="col col-10" id="awesomeThingSubmitCol">
+              <button class="button button-clear button-royal icon ion-plus-circled" id="awesomeThingSubmitButton"></button>
             </div>
           </div>
         </form>
       </ion-footer-bar>
+      <script id="editAwesomeThingModal.html" type="text/ng-template">
+        <ion-modal-view>
+          <ion-header-bar>
+            <h1 class="title">Edit Awesome Thing</h1>
+          </ion-header-bar>
+          <ion-content>
+            <form ng-submit="editAwesomeThing()">
+              <div class="row">
+                <div class="col">
+                  <label class="item item-input-wrapper">
+                    <input type="text" value="{{$parent.selectedThing.text}}" ng-model="$parent.selectedThing.text" id="editInput" />
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <button class="button button-royal">Submit</button>
+                </div>
+              </div>
+            </form>
+          </ion-content>
+        </ion-modal-view>
+      </script>
     </ion-pane>
   </body>
 </html>

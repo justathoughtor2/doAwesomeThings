@@ -1,1 +1,23 @@
 /* Empty. Add your own CSS if you like */
+
+#awesomeThingInputCol, #awesomeThingSubmitCol {
+  height: 44px;
+}
+
+#awesomeThingInputLabel, #awesomeThingSubmitButton {
+  padding: 0px;
+}
+
+[name="awesomeThingForm"] {
+  height: 44px;
+}
+
+.done-or-not {
+  font-size: 33px;
+}
+
+#editInput {
+  padding: 0px;
+  width: 100%;
+  background-color: inherit;
+}
