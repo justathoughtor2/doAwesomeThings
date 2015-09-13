@@ -31,6 +31,8 @@ angular.module('doAwesomeThings', ['ionic', 'ngStorage'])
       complete: false
     });
     
+    $scope.awesomeThingForm.newAwesomeThing = '';
+    
     console.log('Awesome thing added!');
   };
   
